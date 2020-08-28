@@ -33,12 +33,15 @@ class SpotifySort():
 
                 trackName = track['track']['name']
                 trackID = track['track']['id']
-
+                
                 mainArtistID = track['track']['artists'][0]['id']
                 mainArtist = track['track']['artists'][0]['name']
 
+                # Genre is retrieved from the main artist of the track
                 artist = self.sp.artist(mainArtistID)
                 artistGenres = artist['genres']
+                
+                # Some artists don't have a genre, if there is a genre on the artist, the first genre will be used for the sort
                 if (len(artistGenres) == 0):
                     playlistData.append([trackName, mainArtist, trackID, ""])
                 else:
@@ -46,6 +49,7 @@ class SpotifySort():
 
             index += 100
             
+        # Sort on genre alphabetically, then on artist, then on track
         sortedPlaylist = sorted(playlistData, key=lambda sl: (sl[3], sl[2], sl[1]))
 
         genresFLow = []
